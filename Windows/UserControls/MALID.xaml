@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.UserControls.MALID"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" FontSize="18">
+
+    <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
+        <StackPanel Margin="10">
+            <Grid Width="490">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="38,0,0,0">
+                    <Label Content="MAL ID:" HorizontalAlignment="Center" VerticalAlignment="Center" UseLayoutRounding="False" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="idTBox" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="126" Height="23" Margin="0,0,0,0"/>
+                    <Button x:Name="idButton" Content="Find Anime" Margin="8,0,0,0" Click="Button_ClickAsync" Padding="5"/>
+                </StackPanel>
+                <Label x:Name="cooldown" Content="Cooldown: 5.0 Sec" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="314,0,0,0" FontSize="16"/>
+            </Grid>
+            <TextBlock Text="MAL ID can be found by looking at its url. As an example:&#xA;https://myanimelist.net/anime/35790/Tate_no_Yuusha_no_Nariagari" HorizontalAlignment="Center" VerticalAlignment="Top" Width="434" TextAlignment="Center" Margin="0,10,0,5" FontSize="12" LineHeight="14">
+                <TextBlock.TextEffects>
+                    <TextEffect PositionStart="58" PositionCount="30" Foreground="DodgerBlue"/>
+                    <TextEffect PositionStart="88" PositionCount="5" Foreground="Red"/>
+                    <TextEffect PositionStart="93" PositionCount="28" Foreground="DodgerBlue"/>
+                </TextBlock.TextEffects>
+            </TextBlock>
+            <TextBlock Text="Is the show not on My Anime List? Create one from scratch!" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,5" LineHeight="20" Width="300" TextAlignment="Center" FontSize="14"/>
+            <Button x:Name="createNewButton" Content="Create New" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" Padding="5"/>
+        </StackPanel>
+    </Border>
+    
+</UserControl>

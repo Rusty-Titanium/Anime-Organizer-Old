@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.Adding.AddNonMALAnime"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.Adding" 
+             xmlns:usercontrols="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d"
+             Width="688" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words">
+
+    <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
+        <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <Label Content="Add Non MAL Anime" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" BorderBrush="{DynamicResource ControlForeground}" BorderThickness="1"/>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,20,0,0">
+                    <usercontrols:Category x:Name="category" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0"/>
+                    <usercontrols:Score x:Name="score" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20,0,0,0"/>
+                </StackPanel>
+                <usercontrols:Titles x:Name="titles" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" ChooseAltStyle="2"/>
+                <usercontrols:Websites x:Name="websites" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,20,0,0">
+                    <usercontrols:Type x:Name="type" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" ChooseAltStyle="1"/>
+                    <usercontrols:CurrentlyAiring x:Name="currentlyAiring" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                </StackPanel>
+                <usercontrols:NumOfEpisodes x:Name="numOfEpisodes" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0"/>
+                <usercontrols:Broadcast x:Name="broadcast" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <usercontrols:Premiere x:Name="premiere" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <usercontrols:ImageControl x:Name="imageControl" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <usercontrols:Tags x:Name="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <usercontrols:Description x:Name="description" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <usercontrols:ConfirmCancel x:Name="confirmCancel" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,20"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</UserControl>

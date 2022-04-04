@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.UserControls.Type"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" Loaded="Type_Loaded">
+
+    <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
+        <StackPanel Margin="10">
+            <Label Content="Type" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <ComboBox x:Name="typeCBox" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Margin="0,5,0,0" Padding="5">
+                <ComboBoxItem Content="Select type"/>
+                <ComboBoxItem Content="tv"/>
+                <ComboBoxItem Content="ova"/>
+                <ComboBoxItem Content="movie"/>
+                <ComboBoxItem Content="special"/>
+                <ComboBoxItem Content="ona"/>
+                <ComboBoxItem Content="music"/>
+            </ComboBox>
+        </StackPanel>
+    </Border>
+    
+</UserControl>

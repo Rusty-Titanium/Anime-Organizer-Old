@@ -1,0 +1,17 @@
+﻿<Window x:Class="Anime_Organizer.Windows.Startup.InitialSetup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Anime_Organizer.Windows.Startup" 
+        xmlns:usercontrols="clr-namespace:Anime_Organizer.Windows.UserControls"
+        mc:Ignorable="d"
+        Style="{DynamicResource CustomToolWindowStyle}"
+        Title="Anime Organizer" Height="208" Width="513" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" FontSize="18" WindowStartupLocation="CenterScreen" Icon="/Resources/AOIcon.ico">
+
+    <Grid>
+        <TextBlock x:Name="momentLabel" Width="400" HorizontalAlignment="Center" VerticalAlignment="Top" TextAlignment="Center" LineHeight="20" Margin="0,22,0,0"><Run Text="Additional setup is needed."/><LineBreak/><Run Text="Would you like to finish setting up?"/></TextBlock>
+        <usercontrols:ConfirmCancel x:Name="confirmCancel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
+    </Grid>
+    
+</Window>

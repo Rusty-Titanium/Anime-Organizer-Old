@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.UserControls.Tags"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words">
+
+    <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
+        <Grid Margin="10">
+            <Label Content="Tags" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0"/>
+            <TextBox x:Name="tagTBox" HorizontalAlignment="Center" Height="23" VerticalAlignment="Top" VerticalContentAlignment="Center" MaxLines="1" Width="284" Margin="0,32,50,0" KeyDown="Confirm_KeyDown"/>
+            <Button x:Name="addTagButton" Content="add" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="292,29,0,0" Padding="5" Click="Add_Tag_Click"/>
+            <Border x:Name="borderForWrapper" BorderBrush="{DynamicResource TextBoxBorderBrush}" BorderThickness="1" Background="{DynamicResource ControlSlightlyBrighter}" HorizontalAlignment="Center" Height="179" VerticalAlignment="Top" Width="334" Margin="0,63,0,0">
+                <WrapPanel x:Name="tagPanel" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </Border>
+            <Label Content="Note: Needs at least one tag" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,247,0,0"/>
+        </Grid>
+    </Border>
+
+</UserControl>

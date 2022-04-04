@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.Other.AddRandomAnime"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.Other" 
+             xmlns:usercontrols="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words">
+
+    <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <ScrollViewer x:Name="scrollViewer">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,10,10,10">
+                <Label Content="Add Random Anime" HorizontalAlignment="Center" VerticalAlignment="Top" BorderBrush="{DynamicResource ControlForeground}" BorderThickness="1" Margin="0,10,0,10"/>
+                <usercontrols:Category x:Name="category" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10"/>
+                <Label x:Name="recommendedLabel" Content="This anime was in your recommended." HorizontalAlignment="Center"/>
+                <usercontrols:Titles x:Name="titles" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10"/>
+                <usercontrols:Websites x:Name="websites" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10"/>
+                <usercontrols:ConfirmCancel x:Name="confirmCancel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10,0,14"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</UserControl>

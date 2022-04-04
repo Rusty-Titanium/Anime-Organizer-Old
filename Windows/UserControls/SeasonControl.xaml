@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.UserControls.SeasonControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.UserControls" 
+             xmlns:main="clr-namespace:Anime_Organizer"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="350" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words"
+             BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Background="{DynamicResource BackgroundColor}" 
+             Margin="5" MinWidth="350" MaxHeight="400" HorizontalAlignment="Left" VerticalAlignment="Center" SnapsToDevicePixels="True">
+
+    <UserControl.Resources>
+        <main:ImageConverter x:Key="ImageConverter"/>
+        <main:EditAnimeMainHeightConverter x:Key="EditAnimeMainHeightConverter"/>
+        <main:EditAnimeMainWidthConverter x:Key="EditAnimeMainWidthConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border BorderBrush="{DynamicResource ControlBorderBrush}" Height="40" Margin="5" BorderThickness="2" VerticalAlignment="Top">
+            <Grid>
+                <Label x:Name="seasonIndexLabel" Content="Season Index: #" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <Button x:Name="leftButton" Width="25" Height="25" HorizontalAlignment="Left" Margin="5,0,0,0">
+                    <Path x:Name="ArrowLeft" Data="M 0,5 5,10 8,10 3,5 8,0 5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                </Button>
+                <Button x:Name="rightButton" Width="25" Height="25" HorizontalAlignment="Right" Margin="0,0,5,0">
+                    <Path x:Name="ArrowRight" Data="M 0,5 -5,10 -8,10 -3,5 -8,0 -5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                </Button>
+            </Grid>
+        </Border>
+        <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="5 50 5 66" Padding="5" BorderThickness="2" MaxWidth="175" MaxHeight="280" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Image x:Name="picture" MaxHeight="280" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        </Border>
+        <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="180 50 0 66" MinWidth="165">
+            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5 0 5 0">
+                <Grid>
+                    <Label Content="Main Title" HorizontalAlignment="Center" Width="155" Height="27" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Center"/>
+                    <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                    <TextBlock x:Name="mainTitleTBlock" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="14" LineHeight="16" Padding="3"/>
+                </Grid>
+            </Border>
+            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                <Grid>
+                    <Label Content="Alt Title" HorizontalAlignment="Center" Width="155" Height="27" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Center"/>
+                    <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                    <TextBlock x:Name="altTitleTBlock" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="14" LineHeight="16" Padding="3"/>
+                </Grid>
+            </Border>
+        </WrapPanel>
+        <Border BorderBrush="{DynamicResource ControlBorderBrush}" Height="55" Margin="5" BorderThickness="2" VerticalAlignment="Bottom">
+            <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="editNonMALButton" Content="Edit Non MAL" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" BorderThickness="2"/>
+                <Button x:Name="deleteSeasonButton" Content="Delete Season" Padding="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" BorderThickness="2"/>
+            </WrapPanel>
+        </Border>
+    </Grid>
+
+</UserControl>
+    

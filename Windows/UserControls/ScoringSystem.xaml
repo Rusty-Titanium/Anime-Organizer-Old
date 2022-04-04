@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.UserControls.ScoringSystem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words">
+
+    <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
+        <Grid Margin="10">
+            <Label Content="Minimum Score:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,0,0,0"/>
+            <ComboBox x:Name="minCBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="172,0,0,0" Padding="5">
+                <ComboBoxItem Content="0"/>
+                <ComboBoxItem Content="1"/>
+            </ComboBox>
+            <Label Content="Maximum Score:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
+            <ComboBox x:Name="maxCBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="172,38,0,0" Padding="5">
+                <ComboBoxItem Content="3"/>
+                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="5"/>
+                <ComboBoxItem Content="6"/>
+                <ComboBoxItem Content="7"/>
+                <ComboBoxItem Content="8"/>
+                <ComboBoxItem Content="9"/>
+                <ComboBoxItem Content="10"/>
+            </ComboBox>
+            <Label Content="Increments:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,76,0,0"/>
+            <ComboBox x:Name="incrementCBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Margin="172,76,0,0" Padding="5">
+                <ComboBoxItem Content="0.5"/>
+                <ComboBoxItem Content="1"/>
+            </ComboBox>
+        </Grid>
+    </Border>
+
+</UserControl>

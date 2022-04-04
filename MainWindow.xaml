@@ -1,0 +1,1538 @@
+﻿<Window x:Class="Anime_Organizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Anime_Organizer"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Style="{DynamicResource CustomWindowStyle}"
+        Height="576" Width="1024"
+        Title="Anime Organizer" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" FontSize="18" MinWidth="700" MinHeight="410" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Icon="Resources/AOIcon.ico" Loaded="Window_Loaded">
+    
+    <Window.Resources>
+        <local:ScoreConverter x:Key="ScoreConverter"/>
+        <local:BroadcastConverter x:Key="BroadcastConverter"/>
+        <local:PlusOneConverter x:Key="PlusOneConverter"/>
+        <local:ImageConverter x:Key="ImageConverter"/>
+        <local:TagConverter x:Key="TagConverter"/>
+        <local:NotesConverter x:Key="NotesConverter"/>
+        <local:RowDMainWidthConverter x:Key="RowDMainWidthConverter"/>
+        <local:RowDMainHeightConverter x:Key="RowDMainHeightConverter"/>
+    </Window.Resources>
+
+
+    <Grid Margin="5">
+        <TabControl x:Name="tabControl" Margin="0,83,0,0" Padding="0,0,0,-5" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectionChanged="TabControl_SelectionChanged">
+            <TabControl.ItemBindingGroup>
+                <BindingGroup/>
+            </TabControl.ItemBindingGroup>
+
+            <TabItem Header="Currently Watching">
+                <Grid>
+                    <DataGrid x:Name="dataGrid1" ScrollViewer.HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="DataGrid_PreviewMouseWheel" LoadingRowDetails="LoadingRowDetails" ColumnHeaderHeight="30" CanUserAddRows="False" CanUserResizeRows="False" BorderThickness="0" RowHeight="50" ScrollViewer.CanContentScroll="True" AutoGenerateColumns="False" Margin="0,0,0,5" RowHeaderStyle="{StaticResource DataGridRowHeader}" SelectionUnit="Cell" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" Sorting="DataGrid_Sorting" LoadingRow="DataGrid_LoadingRow" BeginningEdit="DataGrid_BeginningEdit" PreviewKeyDown="DataGrid_PreviewKeyDown" AreRowDetailsFrozen="True">
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Move" Click="MenuItem_Move"/>
+                                <Separator SnapsToDevicePixels="True"/>
+                                <MenuItem Header="Edit Anime" Click="MenuItem_Edit_Anime_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <ScrollViewer x:Name="scrollViewer" Margin="0,0,0,0" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" FlowDirection="RightToLeft" Width="{Binding ElementName=tabControl, Path=ActualWidth, Converter={StaticResource RowDMainWidthConverter}}" Height="{Binding ElementName=tabControl, Path=ActualHeight, Converter={StaticResource RowDMainHeightConverter}}">
+                                    <Grid Background="{DynamicResource BackgroundColor}">
+                                        <DockPanel DockPanel.Dock="Left" FlowDirection="LeftToRight">
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <Image Margin="5" Source="{Binding CurrentSeason.ImageURL, Converter={StaticResource ImageConverter}}" Width="175" MaxHeight="280" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -12 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <DockPanel x:Name="dockPanel2" HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Bottom">
+                                                    <Button Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Click="Back_One_Season">
+                                                        <Path x:Name="ArrowLeft" Data="M 0,5 5,10 8,10 3,5 8,0 5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                    <TextBlock x:Name="selectedIndex" Width="20"  Margin="10 0 10 0" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding CurrentSeasonIndex, Converter={StaticResource PlusOneConverter}}"/>
+                                                    <TextBlock Text="of" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Seasons.Count}" Width="20" TextAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0"/>
+                                                    <Button  Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center" Click="Forward_One_Season">
+                                                        <Path x:Name="ArrowRight" Data="M 0,5 -5,10 -8,10 -3,5 -8,0 -5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                </DockPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -2 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <TextBlock Text="Click arrows to choose current season." TextAlignment="Center" FontSize="13" LineHeight="18" Margin="0,0,0,-5"/>
+                                            </Border>
+                                        </DockPanel>
+                                        <StackPanel>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" MinHeight="264" Margin="10 10 209 0" BorderThickness="2" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                                                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="main title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MainTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="alt title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.AlternateTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="website" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="70" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Website}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="premiered" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Premiered}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="type" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="40" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Type}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="Episodes" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Episodes}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="mal id" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MalId}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="airing" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Airing}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="45" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="start date" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="98" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding StartDate}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </WrapPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="0,80,0,0" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                                <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10,-1,10,10" BorderThickness="2" Padding="10 2 10 10">
+                                                <TextBlock x:Name="descriptionTBlock" FontSize="16" LineStackingStrategy="BlockLineHeight" LineHeight="25" Text="{Binding CurrentSeason.Description, StringFormat={}{0}}" FlowDirection="LeftToRight"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Info" Width="60" CanUserResize="False" CanUserReorder="False" ClipboardContentBinding="{x:Null}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Style="{DynamicResource MoreInfoVector}" Height="40"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Name" Binding="{Binding NickNameTitle}" MinWidth="63">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Website}" ClipboardContentBinding="{x:Null}" Header="Website" MinWidth="93">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Score, Converter={StaticResource ScoreConverter}}" Visibility="Collapsed" SortMemberPath="Score" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Score">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.LastWatched, StringFormat=Episode CurrentSeason.LastWatched.Episode}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Last Watched" MinWidth="152">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn ClipboardContentBinding="{x:Null}" SortMemberPath="CurrentSeason.Broadcast.Day" Header="Day" MinWidth="50">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0}" Converter="{StaticResource BroadcastConverter}">
+                                        <Binding Path="CurrentSeason.Broadcast"/>
+                                        <Binding Path="CurrentSeason.Airing"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Tags" MinWidth="65">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Notes, Converter={StaticResource NotesConverter}}" Width="129" CanUserResize="False" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Notes">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Watching Next">
+                <Grid>
+                    <DataGrid x:Name="dataGrid2" PreviewMouseWheel="DataGrid_PreviewMouseWheel" LoadingRowDetails="LoadingRowDetails" ColumnHeaderHeight="30" CanUserAddRows="False" CanUserResizeRows="False" BorderThickness="0" RowHeight="50" ScrollViewer.CanContentScroll="True" AutoGenerateColumns="False" Margin="0,0,0,5" RowHeaderStyle="{StaticResource DataGridRowHeader}" SelectionUnit="Cell" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" Sorting="DataGrid_Sorting" LoadingRow="DataGrid_LoadingRow" BeginningEdit="DataGrid_BeginningEdit" PreviewKeyDown="DataGrid_PreviewKeyDown" AreRowDetailsFrozen="True">
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Move" Click="MenuItem_Move"/>
+                                <Separator SnapsToDevicePixels="True"/>
+                                <MenuItem Header="Edit Anime" Click="MenuItem_Edit_Anime_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <ScrollViewer x:Name="scrollViewer" Margin="0,0,0,0" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" FlowDirection="RightToLeft" Width="{Binding ElementName=tabControl, Path=ActualWidth, Converter={StaticResource RowDMainWidthConverter}}" Height="{Binding ElementName=tabControl, Path=ActualHeight, Converter={StaticResource RowDMainHeightConverter}}">
+                                    <Grid Background="{DynamicResource BackgroundColor}">
+                                        <DockPanel DockPanel.Dock="Left" FlowDirection="LeftToRight">
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <Image Margin="5" Source="{Binding CurrentSeason.ImageURL, Converter={StaticResource ImageConverter}}" Width="175" MaxHeight="280" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -12 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <DockPanel x:Name="dockPanel2" HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Bottom">
+                                                    <Button Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Click="Back_One_Season">
+                                                        <Path x:Name="ArrowLeft" Data="M 0,5 5,10 8,10 3,5 8,0 5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                    <TextBlock x:Name="selectedIndex" Width="20"  Margin="10 0 10 0" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding CurrentSeasonIndex, Converter={StaticResource PlusOneConverter}}"/>
+                                                    <TextBlock Text="of" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Seasons.Count}" Width="20" TextAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0"/>
+                                                    <Button  Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center" Click="Forward_One_Season">
+                                                        <Path x:Name="ArrowRight" Data="M 0,5 -5,10 -8,10 -3,5 -8,0 -5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                </DockPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -2 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <TextBlock Text="Click arrows to choose current season." TextAlignment="Center" FontSize="13" LineHeight="18" Margin="0,0,0,-5"/>
+                                            </Border>
+                                        </DockPanel>
+                                        <StackPanel>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" MinHeight="264" Margin="10 10 209 0" BorderThickness="2" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                                                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="main title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MainTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="alt title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.AlternateTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="website" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="70" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Website}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="premiered" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Premiered}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="type" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="40" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Type}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="Episodes" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Episodes}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="mal id" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MalId}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="airing" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Airing}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="45" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </WrapPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="0,80,0,0" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                                <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10,-1,10,10" BorderThickness="2" Padding="10 2 10 10">
+                                                <TextBlock x:Name="descriptionTBlock" FontSize="16" LineStackingStrategy="BlockLineHeight" LineHeight="25" Text="{Binding CurrentSeason.Description, StringFormat={}{0}}" FlowDirection="LeftToRight"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Info" Width="60" CanUserResize="False" CanUserReorder="False" ClipboardContentBinding="{x:Null}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Style="{DynamicResource MoreInfoVector}" Height="40"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Name" Binding="{Binding NickNameTitle}" MinWidth="63">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Website}" ClipboardContentBinding="{x:Null}" Header="Website" MinWidth="93">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Score, Converter={StaticResource ScoreConverter}}" Visibility="Collapsed" SortMemberPath="Score" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Score">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.LastWatched, StringFormat=Episode CurrentSeason.LastWatched.Episode}" Visibility="Collapsed" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Last Watched" MinWidth="152">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn ClipboardContentBinding="{x:Null}" SortMemberPath="CurrentSeason.Broadcast.Day" Visibility="Collapsed" Header="Day" MinWidth="50">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0}" Converter="{StaticResource BroadcastConverter}">
+                                        <Binding Path="CurrentSeason.Broadcast"/>
+                                        <Binding Path="CurrentSeason.Airing"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Tags" MinWidth="65">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Notes, Converter={StaticResource NotesConverter}}" Width="129" CanUserResize="False" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Notes">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Coming Soon">
+                <Grid>
+                    <DataGrid x:Name="dataGrid3" PreviewMouseWheel="DataGrid_PreviewMouseWheel" LoadingRowDetails="LoadingRowDetails" ColumnHeaderHeight="30" CanUserAddRows="False" CanUserResizeRows="False" BorderThickness="0" RowHeight="50" ScrollViewer.CanContentScroll="True" AutoGenerateColumns="False" Margin="0,0,0,5" RowHeaderStyle="{StaticResource DataGridRowHeader}" SelectionUnit="Cell" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" Sorting="DataGrid_Sorting" LoadingRow="DataGrid_LoadingRow" BeginningEdit="DataGrid_BeginningEdit" PreviewKeyDown="DataGrid_PreviewKeyDown" AreRowDetailsFrozen="True">
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Move" Click="MenuItem_Move"/>
+                                <Separator SnapsToDevicePixels="True"/>
+                                <MenuItem Header="Edit Anime" Click="MenuItem_Edit_Anime_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <ScrollViewer x:Name="scrollViewer" Margin="0,0,0,0" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" FlowDirection="RightToLeft" Width="{Binding ElementName=tabControl, Path=ActualWidth, Converter={StaticResource RowDMainWidthConverter}}" Height="{Binding ElementName=tabControl, Path=ActualHeight, Converter={StaticResource RowDMainHeightConverter}}">
+                                    <Grid Background="{DynamicResource BackgroundColor}">
+                                        <DockPanel DockPanel.Dock="Left" FlowDirection="LeftToRight">
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <Image Margin="5" Source="{Binding CurrentSeason.ImageURL, Converter={StaticResource ImageConverter}}" Width="175" MaxHeight="280" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -12 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <DockPanel x:Name="dockPanel2" HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Bottom">
+                                                    <Button Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Click="Back_One_Season">
+                                                        <Path x:Name="ArrowLeft" Data="M 0,5 5,10 8,10 3,5 8,0 5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                    <TextBlock x:Name="selectedIndex" Width="20"  Margin="10 0 10 0" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding CurrentSeasonIndex, Converter={StaticResource PlusOneConverter}}"/>
+                                                    <TextBlock Text="of" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Seasons.Count}" Width="20" TextAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0"/>
+                                                    <Button  Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center" Click="Forward_One_Season">
+                                                        <Path x:Name="ArrowRight" Data="M 0,5 -5,10 -8,10 -3,5 -8,0 -5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                </DockPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -2 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <TextBlock Text="Click arrows to choose current season." TextAlignment="Center" FontSize="13" LineHeight="18" Margin="0,0,0,-5"/>
+                                            </Border>
+                                        </DockPanel>
+                                        <StackPanel>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" MinHeight="264" Margin="10 10 209 0" BorderThickness="2" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                                                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="main title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MainTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="alt title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.AlternateTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="website" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="70" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Website}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="premiered" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Premiered}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="type" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="40" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Type}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="Episodes" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Episodes}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="mal id" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MalId}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="airing" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Airing}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="45" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </WrapPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="0,80,0,0" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                                <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10,-1,10,10" BorderThickness="2" Padding="10 2 10 10">
+                                                <TextBlock x:Name="descriptionTBlock" FontSize="16" LineStackingStrategy="BlockLineHeight" LineHeight="25" Text="{Binding CurrentSeason.Description, StringFormat={}{0}}" FlowDirection="LeftToRight"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Info" Width="60" CanUserResize="False" CanUserReorder="False" ClipboardContentBinding="{x:Null}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Style="{DynamicResource MoreInfoVector}" Height="40"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Name" Binding="{Binding NickNameTitle}" MinWidth="63">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Website}" ClipboardContentBinding="{x:Null}" Header="Website" MinWidth="93">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Score, Converter={StaticResource ScoreConverter}}" Visibility="Collapsed" SortMemberPath="Score" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Score">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.LastWatched, StringFormat=Episode CurrentSeason.LastWatched.Episode}" Visibility="Collapsed" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Last Watched" MinWidth="152">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn ClipboardContentBinding="{x:Null}" SortMemberPath="CurrentSeason.Broadcast.Day" Header="Day" MinWidth="50">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0}" Converter="{StaticResource BroadcastConverter}">
+                                        <Binding Path="CurrentSeason.Broadcast"/>
+                                        <Binding Path="CurrentSeason.Airing"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Tags" MinWidth="65">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Notes, Converter={StaticResource NotesConverter}}" Width="129" CanUserResize="False" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Notes">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Recommended">
+                <Grid>
+                    <DataGrid x:Name="dataGrid4" PreviewMouseWheel="DataGrid_PreviewMouseWheel" LoadingRowDetails="LoadingRowDetails" ColumnHeaderHeight="30" CanUserAddRows="False" CanUserResizeRows="False" BorderThickness="0" RowHeight="50" ScrollViewer.CanContentScroll="True" AutoGenerateColumns="False" Margin="0,0,0,5" RowHeaderStyle="{StaticResource DataGridRowHeader}" SelectionUnit="Cell" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" Sorting="DataGrid_Sorting" LoadingRow="DataGrid_LoadingRow" BeginningEdit="DataGrid_BeginningEdit" PreviewKeyDown="DataGrid_PreviewKeyDown" AreRowDetailsFrozen="True">
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Move" Click="MenuItem_Move"/>
+                                <Separator SnapsToDevicePixels="True"/>
+                                <MenuItem Header="Edit Anime" Click="MenuItem_Edit_Anime_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <ScrollViewer x:Name="scrollViewer" Margin="0,0,0,0" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" FlowDirection="RightToLeft" Width="{Binding ElementName=tabControl, Path=ActualWidth, Converter={StaticResource RowDMainWidthConverter}}" Height="{Binding ElementName=tabControl, Path=ActualHeight, Converter={StaticResource RowDMainHeightConverter}}">
+                                    <Grid Background="{DynamicResource BackgroundColor}">
+                                        <DockPanel DockPanel.Dock="Left" FlowDirection="LeftToRight">
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <Image Margin="5" Source="{Binding CurrentSeason.ImageURL, Converter={StaticResource ImageConverter}}" Width="175" MaxHeight="280" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -12 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <DockPanel x:Name="dockPanel2" HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Bottom">
+                                                    <Button Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Click="Back_One_Season">
+                                                        <Path x:Name="ArrowLeft" Data="M 0,5 5,10 8,10 3,5 8,0 5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                    <TextBlock x:Name="selectedIndex" Width="20"  Margin="10 0 10 0" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding CurrentSeasonIndex, Converter={StaticResource PlusOneConverter}}"/>
+                                                    <TextBlock Text="of" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Seasons.Count}" Width="20" TextAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0"/>
+                                                    <Button  Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center" Click="Forward_One_Season">
+                                                        <Path x:Name="ArrowRight" Data="M 0,5 -5,10 -8,10 -3,5 -8,0 -5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                </DockPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -2 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <TextBlock Text="Click arrows to choose current season." TextAlignment="Center" FontSize="13" LineHeight="18" Margin="0,0,0,-5"/>
+                                            </Border>
+                                        </DockPanel>
+                                        <StackPanel>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" MinHeight="264" Margin="10 10 209 0" BorderThickness="2" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                                                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="main title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MainTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="alt title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.AlternateTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="website" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="70" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Website}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="premiered" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Premiered}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="type" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="40" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Type}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="Episodes" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Episodes}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="mal id" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MalId}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="airing" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Airing}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="45" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </WrapPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="0,80,0,0" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                                <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10,-1,10,10" BorderThickness="2" Padding="10 2 10 10">
+                                                <TextBlock x:Name="descriptionTBlock" FontSize="16" LineStackingStrategy="BlockLineHeight" LineHeight="25" Text="{Binding CurrentSeason.Description, StringFormat={}{0}}" FlowDirection="LeftToRight"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Info" Width="60" CanUserResize="False" CanUserReorder="False" ClipboardContentBinding="{x:Null}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Style="{DynamicResource MoreInfoVector}" Height="40"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Name" Binding="{Binding NickNameTitle}" MinWidth="63">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Website}" ClipboardContentBinding="{x:Null}" Header="Website" MinWidth="93">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Score, Converter={StaticResource ScoreConverter}}" Visibility="Collapsed" SortMemberPath="Score" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Score">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.LastWatched, StringFormat=Episode CurrentSeason.LastWatched.Episode}" Visibility="Collapsed" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Last Watched" MinWidth="152">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn ClipboardContentBinding="{x:Null}" SortMemberPath="CurrentSeason.Broadcast.Day" Visibility="Collapsed" Header="Day" MinWidth="50">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0}" Converter="{StaticResource BroadcastConverter}">
+                                        <Binding Path="CurrentSeason.Broadcast"/>
+                                        <Binding Path="CurrentSeason.Airing"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Tags" MinWidth="65">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Notes, Converter={StaticResource NotesConverter}}" Width="129" CanUserResize="False" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Notes">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Finished">
+                <Grid>
+                    <DataGrid x:Name="dataGrid5" PreviewMouseWheel="DataGrid_PreviewMouseWheel" LoadingRowDetails="LoadingRowDetails" ColumnHeaderHeight="30" CanUserAddRows="False" CanUserResizeRows="False" BorderThickness="0" RowHeight="50" ScrollViewer.CanContentScroll="True" AutoGenerateColumns="False" Margin="0,0,0,5" RowHeaderStyle="{StaticResource DataGridRowHeaderAlt}" SelectionUnit="Cell" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" Sorting="DataGrid_Sorting" LoadingRow="DataGrid_LoadingRow" BeginningEdit="DataGrid_BeginningEdit" PreviewKeyDown="DataGrid_PreviewKeyDown" AreRowDetailsFrozen="True">
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Move" Click="MenuItem_Move"/>
+                                <Separator SnapsToDevicePixels="True"/>
+                                <MenuItem Header="Edit Anime" Click="MenuItem_Edit_Anime_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <ScrollViewer x:Name="scrollViewer" Margin="0,0,0,0" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" FlowDirection="RightToLeft" Width="{Binding ElementName=tabControl, Path=ActualWidth, Converter={StaticResource RowDMainWidthConverter}}" Height="{Binding ElementName=tabControl, Path=ActualHeight, Converter={StaticResource RowDMainHeightConverter}}">
+                                    <Grid Background="{DynamicResource BackgroundColor}">
+                                        <DockPanel DockPanel.Dock="Left" FlowDirection="LeftToRight">
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <Image Margin="5" Source="{Binding CurrentSeason.ImageURL, Converter={StaticResource ImageConverter}}" Width="175" MaxHeight="280" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -12 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <DockPanel x:Name="dockPanel2" HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Bottom">
+                                                    <Button Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Click="Back_One_Season">
+                                                        <Path x:Name="ArrowLeft" Data="M 0,5 5,10 8,10 3,5 8,0 5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                    <TextBlock x:Name="selectedIndex" Width="20"  Margin="10 0 10 0" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding CurrentSeasonIndex, Converter={StaticResource PlusOneConverter}}"/>
+                                                    <TextBlock Text="of" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Seasons.Count}" Width="20" TextAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0"/>
+                                                    <Button  Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center" Click="Forward_One_Season">
+                                                        <Path x:Name="ArrowRight" Data="M 0,5 -5,10 -8,10 -3,5 -8,0 -5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                </DockPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -2 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <TextBlock Text="Click arrows to choose current season." TextAlignment="Center" FontSize="13" LineHeight="18" Margin="0,0,0,-5"/>
+                                            </Border>
+                                        </DockPanel>
+                                        <StackPanel>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" MinHeight="264" Margin="10 10 209 0" BorderThickness="2" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                                                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="main title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MainTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="alt title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.AlternateTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="website" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="70" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Website}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="premiered" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Premiered}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="type" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="40" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Type}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="Episodes" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Episodes}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="mal id" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MalId}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="airing" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Airing}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="45" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="start date" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="98" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding StartDate}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="finish date" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="98" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding FinishDate}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </WrapPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="0,80,0,0" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                                <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10,-1,10,10" BorderThickness="2" Padding="10 2 10 10">
+                                                <TextBlock x:Name="descriptionTBlock" FontSize="16" LineStackingStrategy="BlockLineHeight" LineHeight="25" Text="{Binding CurrentSeason.Description, StringFormat={}{0}}" FlowDirection="LeftToRight"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Info" Width="60" CanUserResize="False" CanUserReorder="False" ClipboardContentBinding="{x:Null}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Style="{DynamicResource MoreInfoVector}" Height="40"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Name" Binding="{Binding NickNameTitle}" MinWidth="63">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Website}" ClipboardContentBinding="{x:Null}" Header="Website" MinWidth="93">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Score, Converter={StaticResource ScoreConverter}}" SortMemberPath="Score" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Score">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.LastWatched, StringFormat=Episode CurrentSeason.LastWatched.Episode}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Last Watched" MinWidth="152">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn ClipboardContentBinding="{x:Null}" SortMemberPath="CurrentSeason.Broadcast.Day" Visibility="Collapsed" Header="Day" MinWidth="50">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0}" Converter="{StaticResource BroadcastConverter}">
+                                        <Binding Path="CurrentSeason.Broadcast"/>
+                                        <Binding Path="CurrentSeason.Airing"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Tags" MinWidth="65">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Notes, Converter={StaticResource NotesConverter}}" Width="129" CanUserResize="False" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Notes">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Dropped">
+                <Grid>
+                    <DataGrid x:Name="dataGrid6" PreviewMouseWheel="DataGrid_PreviewMouseWheel" LoadingRowDetails="LoadingRowDetails" ColumnHeaderHeight="30" CanUserAddRows="False" CanUserResizeRows="False" BorderThickness="0" RowHeight="50" ScrollViewer.CanContentScroll="True" AutoGenerateColumns="False" Margin="0,0,0,5" RowHeaderStyle="{StaticResource DataGridRowHeader}" SelectionUnit="Cell" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" Sorting="DataGrid_Sorting" LoadingRow="DataGrid_LoadingRow" BeginningEdit="DataGrid_BeginningEdit" PreviewKeyDown="DataGrid_PreviewKeyDown" AreRowDetailsFrozen="True">
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Move" Click="MenuItem_Move"/>
+                                <Separator SnapsToDevicePixels="True"/>
+                                <MenuItem Header="Edit Anime" Click="MenuItem_Edit_Anime_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <ScrollViewer x:Name="scrollViewer" Margin="0,0,0,0" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" FlowDirection="RightToLeft" Width="{Binding ElementName=tabControl, Path=ActualWidth, Converter={StaticResource RowDMainWidthConverter}}" Height="{Binding ElementName=tabControl, Path=ActualHeight, Converter={StaticResource RowDMainHeightConverter}}">
+                                    <Grid Background="{DynamicResource BackgroundColor}">
+                                        <DockPanel DockPanel.Dock="Left" FlowDirection="LeftToRight">
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <Image Margin="5" Source="{Binding CurrentSeason.ImageURL, Converter={StaticResource ImageConverter}}" Width="175" MaxHeight="280" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -12 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <DockPanel x:Name="dockPanel2" HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Bottom">
+                                                    <Button Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Click="Back_One_Season">
+                                                        <Path x:Name="ArrowLeft" Data="M 0,5 5,10 8,10 3,5 8,0 5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                    <TextBlock x:Name="selectedIndex" Width="20"  Margin="10 0 10 0" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding CurrentSeasonIndex, Converter={StaticResource PlusOneConverter}}"/>
+                                                    <TextBlock Text="of" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Seasons.Count}" Width="20" TextAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0"/>
+                                                    <Button  Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center" Click="Forward_One_Season">
+                                                        <Path x:Name="ArrowRight" Data="M 0,5 -5,10 -8,10 -3,5 -8,0 -5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                </DockPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -2 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <TextBlock Text="Click arrows to choose current season." TextAlignment="Center" FontSize="13" LineHeight="18" Margin="0,0,0,-5"/>
+                                            </Border>
+                                        </DockPanel>
+                                        <StackPanel>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" MinHeight="264" Margin="10 10 209 0" BorderThickness="2" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                                                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="main title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MainTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="alt title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.AlternateTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="website" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="70" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Website}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="premiered" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Premiered}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="type" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="40" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Type}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="Episodes" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Episodes}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="mal id" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MalId}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="airing" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Airing}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="45" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </WrapPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="0,80,0,0" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                                <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10,-1,10,10" BorderThickness="2" Padding="10 2 10 10">
+                                                <TextBlock x:Name="descriptionTBlock" FontSize="16" LineStackingStrategy="BlockLineHeight" LineHeight="25" Text="{Binding CurrentSeason.Description, StringFormat={}{0}}" FlowDirection="LeftToRight"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Info" Width="60" CanUserResize="False" CanUserReorder="False" ClipboardContentBinding="{x:Null}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Style="{DynamicResource MoreInfoVector}" Height="40"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Name" Binding="{Binding NickNameTitle}" MinWidth="63">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Website}" ClipboardContentBinding="{x:Null}" Header="Website" MinWidth="93">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Score, Converter={StaticResource ScoreConverter}}" Visibility="Collapsed" SortMemberPath="Score" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Score">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.LastWatched, StringFormat=Episode CurrentSeason.LastWatched.Episode}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Last Watched" MinWidth="152">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn ClipboardContentBinding="{x:Null}" SortMemberPath="CurrentSeason.Broadcast.Day" Visibility="Collapsed" Header="Day" MinWidth="50">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0}" Converter="{StaticResource BroadcastConverter}">
+                                        <Binding Path="CurrentSeason.Broadcast"/>
+                                        <Binding Path="CurrentSeason.Airing"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Tags" MinWidth="65">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Notes, Converter={StaticResource NotesConverter}}" Width="129" CanUserResize="False" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Notes">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="All Anime">
+                <Grid>
+                    <DataGrid x:Name="dataGrid7" PreviewMouseWheel="DataGrid_PreviewMouseWheel" LoadingRowDetails="LoadingRowDetails" ColumnHeaderHeight="30" CanUserAddRows="False" CanUserResizeRows="False" BorderThickness="0" RowHeight="50" ScrollViewer.CanContentScroll="True" AutoGenerateColumns="False" Margin="0,0,0,5" RowHeaderStyle="{StaticResource DataGridRowHeaderAlt}" SelectionUnit="Cell" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" Sorting="DataGrid_Sorting" LoadingRow="DataGrid_LoadingRow" BeginningEdit="DataGrid_BeginningEdit" PreviewKeyDown="DataGrid_PreviewKeyDown" AreRowDetailsFrozen="True">
+
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <ScrollViewer x:Name="scrollViewer" Margin="0,0,0,0" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" FlowDirection="RightToLeft" Width="{Binding ElementName=tabControl, Path=ActualWidth, Converter={StaticResource RowDMainWidthConverter}}" Height="{Binding ElementName=tabControl, Path=ActualHeight, Converter={StaticResource RowDMainHeightConverter}}">
+                                    <Grid Background="{DynamicResource BackgroundColor}">
+                                        <DockPanel DockPanel.Dock="Left" FlowDirection="LeftToRight">
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <Image Margin="5" Source="{Binding CurrentSeason.ImageURL, Converter={StaticResource ImageConverter}}" Width="175" MaxHeight="280" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -12 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <DockPanel x:Name="dockPanel2" HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Bottom">
+                                                    <Button Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Click="Back_One_Season">
+                                                        <Path x:Name="ArrowLeft" Data="M 0,5 5,10 8,10 3,5 8,0 5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                    <TextBlock x:Name="selectedIndex" Width="20"  Margin="10 0 10 0" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding CurrentSeasonIndex, Converter={StaticResource PlusOneConverter}}"/>
+                                                    <TextBlock Text="of" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Seasons.Count}" Width="20" TextAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0"/>
+                                                    <Button  Width="25" Height="25" HorizontalAlignment="Left" VerticalContentAlignment="Center" Click="Forward_One_Season">
+                                                        <Path x:Name="ArrowRight" Data="M 0,5 -5,10 -8,10 -3,5 -8,0 -5,0 z" Fill="{DynamicResource ControlForeground}" Margin="3" Stretch="Uniform"/>
+                                                    </Button>
+                                                </DockPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Padding="5" Margin="5 -2 0 0" Width="199" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top" DockPanel.Dock="Top">
+                                                <TextBlock Text="Click arrows to choose current season." TextAlignment="Center" FontSize="13" LineHeight="18" Margin="0,0,0,-5"/>
+                                            </Border>
+                                        </DockPanel>
+                                        <StackPanel>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" MinHeight="264" Margin="10 10 209 0" BorderThickness="2" VerticalAlignment="Top" FlowDirection="LeftToRight">
+                                                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="main title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MainTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="alt title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.AlternateTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="website" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                                            <Rectangle Width="70" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Website}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="premiered" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Premiered}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="type" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="40" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Type}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="Episodes" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Episodes}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="mal id" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.MalId}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="airing" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Airing}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="45" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="start date" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="98" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding StartDate}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                                        <Grid>
+                                                            <Label Content="finish date" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                                            <Rectangle Width="98" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                                            <Label Content="{Binding FinishDate}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </WrapPanel>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="0,80,0,0" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                                <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                            </Border>
+                                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10,-1,10,10" BorderThickness="2" Padding="10 2 10 10">
+                                                <TextBlock x:Name="descriptionTBlock" FontSize="16" LineStackingStrategy="BlockLineHeight" LineHeight="25" Text="{Binding CurrentSeason.Description, StringFormat={}{0}}" FlowDirection="LeftToRight"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Info" Width="60" CanUserResize="False" CanUserReorder="False" ClipboardContentBinding="{x:Null}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ContentControl Style="{DynamicResource MoreInfoVector}" Height="40"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Name" Binding="{Binding NickNameTitle}" MinWidth="63">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Website}" ClipboardContentBinding="{x:Null}" Header="Website" MinWidth="93">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Score, Converter={StaticResource ScoreConverter}}" SortMemberPath="Score" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Score">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.LastWatched, StringFormat=Episode CurrentSeason.LastWatched.Episode}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Last Watched" MinWidth="152">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn ClipboardContentBinding="{x:Null}" SortMemberPath="CurrentSeason.Broadcast.Day" Header="Day" MinWidth="50">
+                                <DataGridTextColumn.Binding>
+                                    <MultiBinding StringFormat="{}{0}" Converter="{StaticResource BroadcastConverter}">
+                                        <Binding Path="CurrentSeason.Broadcast"/>
+                                        <Binding Path="CurrentSeason.Airing"/>
+                                    </MultiBinding>
+                                </DataGridTextColumn.Binding>
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Tags" MinWidth="65">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Notes, Converter={StaticResource NotesConverter}}" Width="129" CanUserResize="False" CanUserSort="False" ClipboardContentBinding="{x:Null}" Header="Notes">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Notes">
+                <Grid>
+                    <TextBox x:Name="notesTBox" TextWrapping="Wrap" AcceptsReturn="True" TextBlock.LineHeight="22" TextBlock.LineStackingStrategy="BlockLineHeight" VerticalScrollBarVisibility="Auto" Margin="0,5" Padding="3,0,2,0"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
+        <!-- This is the end of the datagrids. The rest of the controls are below. -->
+
+        <Grid VerticalAlignment="Top" Height="82">
+            <Button x:Name="addAnime" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Height="50" Click="Add_Anime" Margin="10,0,0,0" IsTabStop="False">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Padding" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="25">
+                                        <Path x:Name="AddAnimeVector" Fill="{DynamicResource WindowTitleBarColor}" Stretch="Fill" StrokeThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Path.Data>
+                                                <PathGeometry Figures="M100 0A100 100 0 1 0 200 100 100 100 0 0 0 100 0Zm67 108H108v59a8 8 0 0 1-16 0V108H33a8 8 0 0 1 0-16H92V33a8 8 0 0 1 16 0V92h59a8 8 0 0 1 0 16Z"/>
+                                            </Path.Data>
+                                        </Path>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Fill" TargetName="AddAnimeVector" Value="{DynamicResource ControlBorderBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+                <Button.ToolTip>
+                    <ToolTip Content="Add Anime"/>
+                </Button.ToolTip>
+            </Button>
+            <Label Content="Search:" VerticalAlignment="Center" Margin="164,0,0,0" Height="28" MinWidth="87" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
+            <TextBox x:Name="searchAnime" TextChanged="TextBox_TextChanged" Margin="253,0,253,0" VerticalAlignment="Center" Height="24" VerticalContentAlignment="Center" IsTabStop="False"/>
+            <Button x:Name="randomizer" Content="Randomizer" HorizontalAlignment="Right" VerticalAlignment="Center" IsTabStop="False" Padding="5" Margin="0,0,90,0" Click="Randomizer_Click"/>
+            <Button x:Name="settingsCog" HorizontalAlignment="Right" VerticalAlignment="Center" Width="50" Margin="0,0,10,0" Height="50" IsTabStop="False" RenderTransformOrigin="0.5,0.5">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Padding" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="25">
+                                        <Path x:Name="CogVector" Fill="{DynamicResource WindowTitleBarColor}" Stretch="Fill" StrokeThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Path.Data>
+                                                <PathGeometry Figures="M120 102.6V97.4L114 96a14.67 14.67 0 0 0-1.29-3.11L116 87.7 112.3 84l-5.19 3.25A14.21 14.21 0 0 0 103.92 86l-1.37-6h-5.2L96 86a14.2 14.2 0 0 0-3.14 1.29L87.7 84 84 87.7l3.21 5.13A14.39 14.39 0 0 0 85.9 96L80 97.4v5.2L85.9 104a14.39 14.39 0 0 0 1.33 3.21L84 112.3 87.7 116l5.15-3.22A14.2 14.2 0 0 0 96 114.05l1.36 6h5.2l1.37-6a14.21 14.21 0 0 0 3.19-1.32L112.3 116 116 112.3l-3.26-5.21A14.67 14.67 0 0 0 114 104Zm-20 5.6a8.2 8.2 0 1 1 8.2-8.2A8.2 8.2 0 0 1 100 108.2Z" FillRule="NonZero"/>
+                                            </Path.Data>
+                                        </Path>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Fill" TargetName="CogVector" Value="{DynamicResource ControlBorderBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="Settings_Open" Storyboard.TargetProperty="(RotateTransform.Angle)" From="0.0" To="360" RepeatBehavior="Forever" Duration="0:0:1.6"/>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Settings" Storyboard.TargetProperty="(ContextMenu.IsOpen)">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                        <DiscreteObjectKeyFrame.Value>
+                                            <sys:Boolean>True</sys:Boolean>
+                                        </DiscreteObjectKeyFrame.Value>
+                                    </DiscreteObjectKeyFrame>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseRightButtonDown">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="Settings_Open" Storyboard.TargetProperty="(RotateTransform.Angle)" From="0.0" To="360" RepeatBehavior="Forever" Duration="0:0:1.6"/>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Settings" Storyboard.TargetProperty="(ContextMenu.IsOpen)">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                        <DiscreteObjectKeyFrame.Value>
+                                            <sys:Boolean>True</sys:Boolean>
+                                        </DiscreteObjectKeyFrame.Value>
+                                    </DiscreteObjectKeyFrame>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+
+                <Button.RenderTransform>
+                    <RotateTransform x:Name="Settings_Open" Angle="0"/>
+                </Button.RenderTransform>
+
+                <Button.ContextMenu>
+                    <ContextMenu Closed="Settings_Closed" x:Name="Settings" PlacementTarget="{x:Reference Name=settingsCog}">
+                        <MenuItem Header="Save" Click="Save"/>
+                        <Separator/>
+                        <MenuItem Header="Settings and Info" Click="Settings_and_Info_Click"/>
+                        <Separator/>
+                        <MenuItem Header="Change Profile" Click="Change_Profile_Click"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="editGrid" Visibility="Collapsed" IsVisibleChanged="editGrid_IsVisibleChanged">
+            <Rectangle Fill="Black" Opacity=".3" DockPanel.Dock="Top" MouseDown="editGridAndWebsiteGrid_MouseDown"/>
+        </Grid>
+
+        <Grid x:Name="websiteGrid" Visibility="Collapsed" IsVisibleChanged="websiteGrid_IsVisibleChanged">
+            <Rectangle Fill="Black" Opacity=".3" DockPanel.Dock="Top" MouseDown="editGridAndWebsiteGrid_MouseDown"/>
+        </Grid>
+
+    </Grid>
+</Window>

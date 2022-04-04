@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.Other.RandomAnime"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.Other" 
+             xmlns:main="clr-namespace:Anime_Organizer" 
+             xmlns:usercontrols="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             MinWidth="680" MinHeight="350" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" Loaded="RandomAnime_Loaded">
+
+    <UserControl.Resources>
+        <local:ImageURLConverter x:Key="ImageURLConverter"/>
+        <main:TagConverter x:Key="TagConverter"/>
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource BackgroundColor}" SnapsToDevicePixels="True">
+        <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1"/>
+        <Button x:Name="addToList" Content="Add To List" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Padding="5" Width="122" Click="Add_Click"/>
+        <Label Content="Random Anime" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0" BorderBrush="{DynamicResource ControlForeground}" BorderThickness="1"/>
+        <TextBlock x:Name="retrieveLabel" HorizontalAlignment="Right" VerticalAlignment="Top" TextAlignment="Center" Margin="0,8,8,0" FontSize="16" LineHeight="20"><Run Text="Retrieved From:"/><LineBreak/><Run/></TextBlock>
+        <ScrollViewer x:Name="scrollViewer" Margin="2 50 2 50" Padding="4" VerticalScrollBarVisibility="Auto" Background="{DynamicResource ControlBackground}">
+            <Grid Background="{DynamicResource BackgroundColor}">
+                <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10" BorderThickness="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Image Margin="5" Source="{Binding CurrentSeason.ImageURL, Converter={StaticResource ImageURLConverter}}" MaxWidth="175" MaxHeight="280" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                </Border>
+                <StackPanel>
+                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" MinHeight="264" Margin="209 10 10 0" BorderThickness="2" VerticalAlignment="Top">
+                        <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                <Grid>
+                                    <Label Content="main title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                    <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                    <Label Content="{Binding CurrentSeason.MainTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                <Grid>
+                                    <Label Content="alt title" HorizontalAlignment="Center" Height="27" VerticalAlignment="Top" FontSize="16"/>
+                                    <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                    <Label Content="{Binding CurrentSeason.AlternateTitle}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                <Grid>
+                                    <Label Content="premiered" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                    <Rectangle Width="90" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                    <Label Content="{Binding CurrentSeason.Premiered}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                <Grid>
+                                    <Label Content="type" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                    <Rectangle Width="40" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                    <Label Content="{Binding CurrentSeason.Type}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                <Grid>
+                                    <Label Content="Episodes" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                    <Rectangle Width="80" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                    <Label Content="{Binding CurrentSeason.Episodes}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                <Grid>
+                                    <Label Content="mal id" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                    <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                    <Label Content="{Binding CurrentSeason.MalId}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                <Grid>
+                                    <Label Content="airing" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                    <Rectangle Width="58" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                    <Label Content="{Binding CurrentSeason.Airing}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="2" Margin="5">
+                                <Grid>
+                                    <Label Content="tags" HorizontalAlignment="Center" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                                    <Rectangle Width="45" Fill="{DynamicResource ControlForeground}" Height="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,0,0"/>
+                                    <Label Content="{Binding CurrentSeason.Tags, Converter={StaticResource TagConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,25,0,0" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                        </WrapPanel>
+                    </Border>
+                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="0,50,0,0" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                        <Label Content="Description" HorizontalAlignment="Left" VerticalAlignment="Top" Height="27" FontSize="16"/>
+                    </Border>
+                    <Border BorderBrush="{DynamicResource ControlBorderBrush}" Margin="10,-1,10,10" BorderThickness="2" Padding="10 2 10 10">
+                        <TextBlock x:Name="descriptionTBlock" FontSize="16" LineStackingStrategy="BlockLineHeight" LineHeight="25" Text="{Binding CurrentSeason.Description, StringFormat={}{0}}"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+        <Button x:Name="filter" Content="Filters" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="95" Margin="10,0,0,10" Padding="5" Click="Open_Popup_Click"/>
+        <Button x:Name="randomize" Content="Randomize" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="132,0,0,10" Padding="5" Click="Random_Anime_Click">
+            <Button.ToolTip>
+                <ToolTip Content="Click to get a random anime according to the currently selected filters." Width="260"/>
+            </Button.ToolTip>
+        </Button>
+        <Label x:Name="cooldown" Content="Cooldown: 5 Sec" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="260,0,0,12" FontSize="16"/>
+        <Button x:Name="backButton" Content="Close" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="95" Margin="0,0,10,10" Padding="5" Click="Close_Click" Style="{DynamicResource CloseButton}"/>
+
+        <Grid x:Name="editGrid" Visibility="hidden" IsVisibleChanged="editGrid_IsVisibleChanged">
+            <Rectangle Fill="Black" Opacity=".3" DockPanel.Dock="Top" MouseDown="editGridAndWebsiteGrid_MouseDown"/>
+            <Border x:Name="filterBorder" Visibility="Collapsed" Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True" Width="500" Height="250" VerticalAlignment="Bottom" Margin="0,0,0,60">
+                <Grid Margin="10">
+                    <Label Content="Random Anime" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" BorderBrush="{DynamicResource ControlForeground}" BorderThickness="1"/>
+                    <Button x:Name="close" Content="Close" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0" Padding="5" Click="Close_Popup_Click" Style="{DynamicResource CloseButton}" IsTabStop="False"/>
+                    <TextBlock x:Name="note" Text="Note: Select to include." HorizontalAlignment="Center" VerticalAlignment="Top" TextAlignment="Center" Margin="0,70,0,0" FontSize="16" LineHeight="20"/>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,40">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                            <Border BorderBrush="{DynamicResource WindowBorderColor}" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" Margin="10,10,0,5" Padding="10,0,0,0" Height="34">
+                                <CheckBox x:Name="tv" Content="TV" Width="82" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsTabStop="False" Height="32"/>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource WindowBorderColor}" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" Margin="10,10,0,5" Padding="10,0,0,0" Height="34">
+                                <CheckBox x:Name="ova" Content="OVA" Width="82" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsTabStop="False" Height="32"/>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource WindowBorderColor}" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" Margin="10,10,0,5" Padding="10,0,0,0" Height="34">
+                                <CheckBox x:Name="ona" Content="ONA" Width="82" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsTabStop="False" Height="32"/>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource WindowBorderColor}" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" Margin="10,10,10,5" Padding="10,0,0,0" Height="34">
+                                <CheckBox x:Name="movie" Content="Movie" Width="82" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsTabStop="False" Height="32"/>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                            <Border BorderBrush="{DynamicResource WindowBorderColor}" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" Margin="10,5,0,10" Padding="10,0,0,0" Height="34">
+                                <CheckBox x:Name="special" Content="Special" Width="100" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsTabStop="False" Height="32"/>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource WindowBorderColor}" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" Margin="10,5,0,10" Padding="10,0,0,0" Height="34">
+                                <CheckBox x:Name="music" Content="Music" Width="82" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsTabStop="False" Height="32"/>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource WindowBorderColor}" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" Margin="10,5,10,10" Padding="10,0,0,0" Height="34">
+                                <CheckBox x:Name="unknown" Content="Unknown" Width="118" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked" IsTabStop="False" Height="32"/>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="Warning: Anime chosen at random may or may not be the first in a series." Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Bottom" TextAlignment="Center" Foreground="Red" FontSize="16" LineHeight="18"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+    
+</UserControl>

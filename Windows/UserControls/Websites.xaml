@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.UserControls.Websites"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             Width="400" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" Loaded="Websites_Loaded">
+
+    <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
+        <StackPanel Margin="10">
+            <Label x:Name="websiteLabel" Content="Website" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <ComboBox x:Name="websiteCBox" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5" Margin="0,5,0,5"/>
+            <TextBlock x:Name="websiteTBlock" Text="Is your website not here?&#xA;Add your own!" Width="239" HorizontalAlignment="Center" VerticalAlignment="Top" TextAlignment="Center" FontSize="14" LineHeight="18" Margin="0,5,0,5"/>
+            <Button x:Name="websitesButton" Content="Websites" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" Padding="5" Click="Websites_Click">
+                <Button.ToolTip>
+                    <ToolTip Content="Click this to add or delete websites."/>
+                </Button.ToolTip>
+            </Button>
+        </StackPanel>
+    </Border>
+
+</UserControl>

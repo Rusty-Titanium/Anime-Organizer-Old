@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.Other.RefreshAnime"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.Other" 
+             xmlns:usercontrols="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             MinWidth="650" MinHeight="350" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" Loaded="RefreshAnime_Loaded">
+
+    <Grid Background="{DynamicResource BackgroundColor}" SnapsToDevicePixels="True">
+        <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1"/>
+        <Label Content="Refresh Anime" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" BorderBrush="{DynamicResource ControlForeground}" BorderThickness="1"/>
+        <Button x:Name="backButton" HorizontalAlignment="Left" VerticalAlignment="Top" Width="106" Margin="16,26,0,0" Height="27" Click="backButton_Click">
+            <Button.Content>
+                <Grid>
+                    <Path Data="m 0,0 8,-8 6,0 -6,6 16,0 0,4 -16,0 6,6 -6,0 -8,-8 z" Fill="Gray" Stretch="Uniform" Width="30" Margin="0 0 75 0"/>
+                    <Label Content="Back" VerticalContentAlignment="Center" Margin="30,-11,0,-11"/>
+                </Grid>
+            </Button.Content>
+        </Button>
+        <TextBlock x:Name="label1" Text="This checks and refreshes anime in the selected tab." HorizontalAlignment="Center" VerticalAlignment="Top" TextAlignment="Center" Width="504" Margin="73,65,73,0" LineHeight="20" FontSize="16"/>
+        <usercontrols:Category x:Name="category" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,94,0,0"/>
+        <Button x:Name="lockButton" Content="lock in" HorizontalAlignment="Center" VerticalAlignment="Top" Width="95" Margin="360,134,0,0" Padding="5" Click="Lock_Click"/>
+        <TextBlock x:Name="label2" Text="Lock in to see the estimated amount of time." HorizontalAlignment="Center" VerticalAlignment="Top" TextAlignment="Center" LineHeight="20" Width="414" Margin="0,190,0,0" FontSize="16"/>
+        <Label x:Name="estimateLabel" Content="Estimated Time:" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Margin="10 0 10 100"/>
+        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="95" Margin="0,0,0,50" Padding="5" Click="Update_Click">
+            <Button.ToolTip>
+                <ToolTip Content="Internet connection is required to complete the process."/>
+            </Button.ToolTip>
+        </Button>
+        <Label Content="Progress:" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,14"/>
+        <ProgressBar x:Name="progressBar" Height="17" VerticalAlignment="Bottom" Margin="130,0,30,19"/>
+    </Grid>
+
+</UserControl>

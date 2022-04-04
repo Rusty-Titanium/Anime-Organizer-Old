@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="Anime_Organizer.Windows.Adding.AddSeason"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Anime_Organizer.Windows.Adding"
+             xmlns:usercontrols="clr-namespace:Anime_Organizer.Windows.UserControls"
+             mc:Ignorable="d" 
+             MaxHeight="750" Width="688" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" FontSize="18" d:DesignHeight="750" Loaded="AddSeason_Loaded">
+
+    <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
+        <ScrollViewer x:Name="scrollViewer">
+            <StackPanel>
+                <Label Content="Add Season" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" BorderBrush="{DynamicResource ControlForeground}" BorderThickness="1"/>
+                <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" SnapsToDevicePixels="True">
+                    <StackPanel Margin="10">
+                        <Label Content="Click here to search for anime on My Anime List." HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        <Button Content="Search MAL" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Padding="5" Click="Search_For_Anime_Click"/>
+                    </StackPanel>
+                </Border>
+                <usercontrols:MALID x:Name="malid" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <usercontrols:Titles x:Name="titles" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" ChooseAltStyle="3"/>
+                <usercontrols:Websites x:Name="websites" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <usercontrols:ConfirmCancel x:Name="confirmCancel" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,20"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</UserControl>
