@@ -35,6 +35,7 @@ namespace Anime_Organizer
          * //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
          * Current Issues With the Window
          * 
+         * - When scrolling, there my be certain anime that don't have any tags, this causes the program to crash at the TagConverter. Anime to test with. D4DJ: First Mix
          * - Figure out how to put on a publisher name
          * - Find a way to add a key to it (though i think it already does)
          * - Find a way to have it installable from the mincrosoft store.
