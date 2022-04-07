@@ -142,13 +142,10 @@ namespace Anime_Organizer
             List<String> array = (List<String>)value;
             String newValue = "";
 
-
             if (array.Count > 0)
             {
                 foreach (String tag in array)
-                {
                     newValue += tag + ", ";
-                }
 
                 newValue = newValue.Substring(0, newValue.Length - 2);
             }
