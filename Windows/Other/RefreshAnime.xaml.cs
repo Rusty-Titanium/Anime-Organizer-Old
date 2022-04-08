@@ -110,9 +110,9 @@ namespace Anime_Organizer.Windows.Other
                     if (!season.MalId.StartsWith("A"))
                     {
                         IJikan jikan = new Jikan();
-                        //JikanDotNet.Anime anime = await jikan.GetAnime(int.Parse(season.MalId));
 
-                        BaseJikanResponse<JikanDotNet.Anime> anime = await jikan.GetAnimeAsync(int.Parse(season.MalId));
+                        //JikanDotNet.Anime anime = await jikan.GetAnime(int.Parse(season.MalId));
+                        JikanDotNet.Anime anime = (await jikan.GetAnimeAsync(int.Parse(season.MalId))).Data;
 
                         Update_Check(season, anime);
 
@@ -162,17 +162,14 @@ namespace Anime_Organizer.Windows.Other
         /// </summary>
         /// <param name="season"></param>
         /// <param name="anime"></param>
-        private void Update_Check(Season season, BaseJikanResponse<JikanDotNet.Anime> anime)
+        private void Update_Check(Season season, JikanDotNet.Anime anime)
         {
-            JikanDotNet.Anime animeData = anime.Data;
+            season.MainTitle = anime.Title;
+            season.AlternateTitle = anime.TitleEnglish;
 
-
-            season.MainTitle = animeData.Title;
-            season.AlternateTitle = animeData.TitleEnglish;
-
-            if (animeData.Aired.From != null)
+            if (anime.Aired.From != null)
             {
-                DateTime date = (DateTime)animeData.Aired.From;
+                DateTime date = (DateTime)anime.Aired.From;
                 season.Premiered = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month) + " " + date.Day + ", " + date.Year;
             }
             else
@@ -180,18 +177,18 @@ namespace Anime_Organizer.Windows.Other
                 season.Premiered = "Unknown";
             }
 
-            season.Type = animeData.Type;
-            season.Description = animeData.Synopsis;
+            season.Type = anime.Type;
+            season.Description = anime.Synopsis;
 
-            if (animeData.Episodes == null)
+            if (anime.Episodes == null)
                 season.Episodes = -1;
             else
-                season.Episodes = (int)animeData.Episodes;
+                season.Episodes = (int)anime.Episodes;
 
-            season.Airing = animeData.Airing;
+            season.Airing = anime.Airing;
             season.Tags = new List<String>();
 
-            foreach (JikanDotNet.MalUrl tag in animeData.Genres)
+            foreach (JikanDotNet.MalUrl tag in anime.Genres)
             {
                 season.Tags.Add(tag.Name);
             }
@@ -205,13 +202,13 @@ namespace Anime_Organizer.Windows.Other
 
             season.Tags.Sort();
 
-            season.Broadcast = Anime.CreateBroadcast(animeData);
+            season.Broadcast = Anime.CreateBroadcast(anime);
             
             // Only adds the file if it's missing. It does not replace Images for the sake of not a lot of file craziness.
-            if (!File.Exists(Config.environmentPath + "Image Cache\\" + animeData.MalId + ".jpg"))
+            if (!File.Exists(Config.environmentPath + "Image Cache\\" + anime.MalId + ".jpg"))
             {
                 WebClient webClient = new WebClient();
-                webClient.DownloadFile(animeData.Images.JPG.ImageUrl, Config.environmentPath + "Image Cache\\" + animeData.MalId + ".jpg");
+                webClient.DownloadFile(anime.Images.JPG.ImageUrl, Config.environmentPath + "Image Cache\\" + anime.MalId + ".jpg");
                 webClient.Dispose();
             }
         }

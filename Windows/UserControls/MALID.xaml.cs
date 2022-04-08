@@ -67,7 +67,7 @@ namespace Anime_Organizer.Windows.UserControls
                 try
                 {
                     IJikan jikan = new Jikan();
-                    JikanDotNet.Anime jikanAnime = await jikan.GetAnime(int.Parse(idTBox.Text));
+                    JikanDotNet.Anime jikanAnime = (await jikan.GetAnimeAsync(int.Parse(idTBox.Text))).Data;
 
                     if (jikanAnime == null)
                     {

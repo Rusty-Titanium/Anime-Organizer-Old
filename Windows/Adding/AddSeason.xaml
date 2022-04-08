@@ -11,6 +11,7 @@
     <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
         <ScrollViewer x:Name="scrollViewer">
             <StackPanel>
+                <!--
                 <Label Content="Add Season" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" BorderBrush="{DynamicResource ControlForeground}" BorderThickness="1"/>
                 <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" SnapsToDevicePixels="True">
                     <StackPanel Margin="10">
@@ -18,6 +19,7 @@
                         <Button Content="Search MAL" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Padding="5" Click="Search_For_Anime_Click"/>
                     </StackPanel>
                 </Border>
+                -->
                 <usercontrols:MALID x:Name="malid" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
                 <usercontrols:Titles x:Name="titles" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" ChooseAltStyle="3"/>
                 <usercontrols:Websites x:Name="websites" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>

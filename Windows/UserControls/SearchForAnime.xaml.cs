@@ -21,6 +21,7 @@ namespace Anime_Organizer.Windows.UserControls
     /// </summary>
     public partial class SearchForAnime : UserControl
     {
+        /**
         private List<ICollection<AnimeSearchEntry>> collectionOfPages = new List<ICollection<AnimeSearchEntry>>();
         private List<CheckBox> listOfCBox = new List<CheckBox>();
         private AnimeSearchConfig animeSearchConfig = new AnimeSearchConfig(){};
@@ -660,7 +661,7 @@ namespace Anime_Organizer.Windows.UserControls
 
 
 
-
+         */
     }
 
 

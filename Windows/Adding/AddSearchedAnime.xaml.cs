@@ -17,6 +17,7 @@ namespace Anime_Organizer.Windows.Adding
     /// </summary>
     public partial class AddSearchedAnime : UserControl
     {
+        /**
         private SearchForAnime parentControl;
         private JikanDotNet.Anime chosenAnime;
 
@@ -195,7 +196,7 @@ namespace Anime_Organizer.Windows.Adding
                     if (!File.Exists(Config.environmentPath + "Image Cache\\" + anime.CurrentSeason.MalId + ".jpg"))
                     {
                         WebClient webClient = new WebClient();
-                        webClient.DownloadFile(chosenAnime.ImageURL, Config.environmentPath + "Image Cache\\" + anime.CurrentSeason.MalId + ".jpg");
+                        webClient.DownloadFile(chosenAnime.Images.JPG.ImageUrl, Config.environmentPath + "Image Cache\\" + anime.CurrentSeason.MalId + ".jpg");
                         webClient.Dispose();
                     }
 
@@ -270,6 +271,7 @@ namespace Anime_Organizer.Windows.Adding
         }
 
 
-
+         */
     }
+
 }

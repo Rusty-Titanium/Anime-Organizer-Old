@@ -76,7 +76,7 @@ namespace Anime_Organizer.Windows.Adding
                     if (!File.Exists(Config.environmentPath + "Image Cache\\" + newAnime.MalId + ".jpg"))
                     {
                         WebClient webClient = new WebClient();
-                        webClient.DownloadFile(newAnime.ImageURL, Config.environmentPath + "Image Cache\\" + newAnime.MalId + ".jpg");
+                        webClient.DownloadFile(newAnime.Images.JPG.ImageUrl, Config.environmentPath + "Image Cache\\" + newAnime.MalId + ".jpg");
                         webClient.Dispose();
                     }
 
@@ -175,6 +175,7 @@ namespace Anime_Organizer.Windows.Adding
             malid.idTBox.Focus();
         }
 
+        /**
         /// <summary>
         /// 
         /// </summary>
@@ -190,5 +191,6 @@ namespace Anime_Organizer.Windows.Adding
             SearchForAnime control = new SearchForAnime(false, originalAnime);
             grid.Children.Add(control);
         }
+         */
     }
 }

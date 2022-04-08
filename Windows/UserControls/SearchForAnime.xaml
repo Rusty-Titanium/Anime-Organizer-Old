@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:Anime_Organizer.Windows.UserControls" 
              xmlns:main="clr-namespace:Anime_Organizer"
              mc:Ignorable="d" 
-             d:DesignWidth="687" d:DesignHeight="1800" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" Loaded="SearchForAnime_Loaded">
-   
+             d:DesignWidth="687" d:DesignHeight="1800" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words">
+    <!--  Loaded="SearchForAnime_Loaded" This portiuon of code used to be in the usercontrol obove this text -->
     
     <UserControl.Resources>
         <local:ImageURLConverter x:Key="ImageURLConverter"/>
@@ -15,7 +15,7 @@
         <main:RowDMainHeightConverter x:Key="RowDMainHeightConverter"/>
     </UserControl.Resources>
 
-
+    <!--
 
     <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True">
         <Grid>
@@ -524,7 +524,7 @@
 
             </DataGrid>
             
-            <!-- This grid might just get removed and just have the border instead. -->
+            <!- This grid might just get removed and just have the border instead. ->
             <Grid x:Name="editGrid" Visibility="Collapsed" IsVisibleChanged="editGrid_IsVisibleChanged">
                 
             </Grid>
@@ -532,5 +532,7 @@
 
         </Grid>
     </Border>
-
+    
+    -->
+    
 </UserControl>

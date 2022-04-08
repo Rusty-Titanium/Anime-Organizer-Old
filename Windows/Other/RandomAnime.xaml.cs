@@ -180,10 +180,10 @@ namespace Anime_Organizer.Windows.Other
                 try
                 {
                     IJikan jikan = new Jikan();
-                    JikanDotNet.Anime jikanAnime = await jikan.GetAnime(idValue);
+                    JikanDotNet.Anime jikanAnime = (await jikan.GetAnimeAsync(idValue)).Data;
 
                     tempAnime = Anime.AnimeObjectConverter(jikanAnime, jikanAnime.Title, "Undetermined", -1);
-                    tempAnime.CurrentSeason.ImageURL = jikanAnime.ImageURL;
+                    tempAnime.CurrentSeason.ImageURL = jikanAnime.Images.JPG.ImageUrl;
 
 
                     this.DataContext = tempAnime; // Seems to be throwing some exceptions but isn't breaking the program. Not sure how to fix this.

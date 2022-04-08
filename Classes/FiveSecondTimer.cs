@@ -50,9 +50,6 @@ namespace Anime_Organizer.Classes
                 
                 switch (control.GetType().Name)
                 {
-                    case "SearchForAnime":
-                        ((SearchForAnime)control).Timer_Finished();
-                        break;
                     case "MALID":
                         ((MALID)control).Timer_Finished();
                         break;

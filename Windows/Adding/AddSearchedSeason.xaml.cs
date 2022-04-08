@@ -19,6 +19,8 @@ namespace Anime_Organizer.Windows.Adding
     /// </summary>
     public partial class AddSearchedSeason : UserControl
     {
+        /**
+
         private SearchForAnime parentControl;
         private JikanDotNet.Anime chosenAnime;
         private Anime animeAddingTo;
@@ -183,5 +185,7 @@ namespace Anime_Organizer.Windows.Adding
         {
             titles.nicknameTBox.Focus();
         }
+         */
+
     }
 }

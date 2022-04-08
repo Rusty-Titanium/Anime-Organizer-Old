@@ -12,12 +12,14 @@
         <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
                 <Label Content="Add Anime" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" BorderBrush="{DynamicResource ControlForeground}" BorderThickness="1"/>
+                <!--
                 <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" SnapsToDevicePixels="True">
                     <StackPanel Margin="10">
                         <Label Content="Click here to search for anime on My Anime List." HorizontalAlignment="Center" VerticalAlignment="Top"/>
                         <Button Content="Search MAL" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Padding="5" Click="Search_For_Anime_Click"/>
                     </StackPanel>
                 </Border>
+                -->
                 <usercontrols:MALID x:Name="malid" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
                 <usercontrols:Titles x:Name="titles" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
                 <usercontrols:Websites x:Name="websites" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>

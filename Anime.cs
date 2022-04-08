@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Anime_Organizer.Classes;
+using System.Diagnostics;
 
 namespace Anime_Organizer
 {
@@ -284,7 +285,7 @@ namespace Anime_Organizer
 			season.Airing = anime.Airing;
 			season.Tags = new List<String>();
 
-			foreach (JikanDotNet.MALSubItem tag in anime.Genres)
+			foreach (JikanDotNet.MalUrl tag in anime.Genres)
 			{
 				season.Tags.Add(tag.Name);
 			}
@@ -305,7 +306,7 @@ namespace Anime_Organizer
 		public static TimeInfo CreateBroadcast(JikanDotNet.Anime anime)
         {
 			// THIS SECTION NEEDS A REVISION IF POSSIBLE. (Probably not going to happen. Same exact thing used in refresh anime so if this is changed, change it there too)
-			if (anime.Broadcast != null && !anime.Broadcast.Contains("Unknown") && !anime.Broadcast.Contains("Not scheduled"))
+			if (anime.Broadcast != null && !anime.Broadcast.String.Contains("Unknown") && !anime.Broadcast.String.Contains("Not scheduled"))
 			{
 				// -9 so we can get to UTC +00:00 as native time in Japan is -9.
 				int hourDifference = -9;
@@ -316,11 +317,11 @@ namespace Anime_Organizer
 
 				for (int i = 0; i < 7; i++)
 				{
-					if (anime.Broadcast.StartsWith(daysOfTheWeek[i]))
+					if (anime.Broadcast.String.StartsWith(daysOfTheWeek[i]))
 						day = i;
 				}
 
-				String[] broadcastArray = anime.Broadcast.Split();
+				String[] broadcastArray = anime.Broadcast.String.Split();
 
 				int startingHours = int.Parse(broadcastArray[2].Substring(0, 2)), finalHours = startingHours + hourDifference;
 

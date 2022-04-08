@@ -38,15 +38,15 @@ namespace Anime_Organizer
         private async Task<JikanDotNet.Anime> isMethod()
         {
             IJikan jikan = new Jikan();
-            JikanDotNet.Anime anime = await jikan.GetAnime(35790);
+            JikanDotNet.Anime anime = (await jikan.GetAnimeAsync(35790)).Data;
             
             
             Console.WriteLine(anime.Broadcast); //(ex Wednesday's at 22:00 (JST)) It's a string, so figure it out
             Console.WriteLine(anime.Episodes); //This just gives a number (in string form, but special cases like One Piece have an unknown amount of episodes)
             Console.WriteLine(anime.Genres);   //Tags
-            Console.WriteLine(anime.ImageURL);    //I plan on using this where if you hover over the anime name for over 2 seconds (or hover an "i" button) a tooltip image will show
+            Console.WriteLine(anime.Images.JPG.ImageUrl);    //I plan on using this where if you hover over the anime name for over 2 seconds (or hover an "i" button) a tooltip image will show
             Console.WriteLine(anime.MalId);        //definitely will need this if im going to keep tabs on anime that are currently airing
-            Console.WriteLine(anime.Premiered); //gives season and year (ex. Winter 2019)
+            Console.WriteLine(anime.Season + " " + anime.Year); //gives season and year (ex. Winter 2019)
             Console.WriteLine(anime.Status); //(ex Finished Airing, Currently Airing)
             Console.WriteLine(anime.Synopsis); //This is basically the description of the anime, not sure if i will use this.
             Console.WriteLine(anime.Title); //(Japanese pronunciation in English) unless this is also in English as i know that is a thing sometimes
@@ -59,7 +59,7 @@ namespace Anime_Organizer
 
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
-            bitmap.UriSource = new Uri(anime.ImageURL, UriKind.Absolute);
+            bitmap.UriSource = new Uri(anime.Images.JPG.ImageUrl, UriKind.Absolute);
             bitmap.EndInit();
             animeImage.Source = bitmap;
 

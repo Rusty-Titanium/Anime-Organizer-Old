@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Anime_Organizer.Windows.Adding" 
              xmlns:usercontrols="clr-namespace:Anime_Organizer.Windows.UserControls"
              mc:Ignorable="d" 
-             d:DesignWidth="650" d:DesignHeight="700" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words" Loaded="AddSearchedAnime_Loaded">
+             d:DesignWidth="650" d:DesignHeight="700" FontSize="18" FontFamily="/Anime Organizer;component/Fonts/#CC Wild Words">
 
     <Border Background="{DynamicResource BackgroundColor}" BorderBrush="{DynamicResource WindowBorderColor}" BorderThickness="1" SnapsToDevicePixels="True" Margin="-1">
         <ScrollViewer x:Name="scrollViewer">
