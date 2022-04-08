@@ -147,7 +147,6 @@ namespace Anime_Organizer
                 foreach (String tag in array)
                     newValue += tag + ", ";
                 
-
                 newValue = newValue.Substring(0, newValue.Length - 2);
             }
 
